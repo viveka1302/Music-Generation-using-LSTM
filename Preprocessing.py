@@ -1,4 +1,5 @@
 import os
+import json
 import music21
 
 class Preprocessing:
@@ -7,6 +8,7 @@ class Preprocessing:
         self.MIDI_FILES_PATH = MIDI_FILES_PATH
         self.TIME_STEP = 0.25
         self.path1='x'
+        self.SEQUENCE_LENGTH = 64
 
     def load_songs_in_midi(self):
         songs = []
@@ -30,8 +32,7 @@ class Preprocessing:
             interval = music21.interval.Interval(key.tonic, music21.pitch.Pitch('C'))
         elif key.mode == 'minor':
             interval = music21.interval.Interval(key.tonic, music21.pitch.Pitch('A'))
-        #Transpose song by calculated interval
-    #INFINITE RECURSION BUG :   
+        #Transpose song by calculated interval 
         transposed_song = song.transpose(interval)
         return transposed_song
     
@@ -57,10 +58,38 @@ class Preprocessing:
         songs= perfffy
         for i , song in enumerate(songs):
             transposed_song = self.transposed(song)
-            encoded_song = self.encode_song(song)
+            encoded_song = self.encode_song(transposed_song)
             save_path = os.path.join('Time_Series_Dataset',str(i))
             with open(save_path,'w') as fp:
                 fp.write(encoded_song)
 
+    def load(self,file_path):
+        with open(file_path,'r') as fp:
+            song = fp.read()
+        return song
+
+    def create_single_line_dataset(self):
+        new_song_delimiter = ' / '*self.SEQUENCE_LENGTH
+        songs=''
+        for path , _ , files in os.walk('Time_Series_Dataset'):
+            for file in files:
+                file_path = os.path.join(path,file)
+                song = self.load(file_path)
+                songs = songs + song + " " + new_song_delimiter
+        songs = songs[:-1]
+        with open('Songs_Dataset','w') as fp:
+            fp.write(songs)
+        return songs 
+
+    def create_mapping(self,songs):
+        mapping = {}
+        songs = songs.split()
+        vocabulary = list(set(songs))
+        for i , symbol in enumerate(vocabulary):
+            mapping[symbol]=i
+        with open('Mapping.json','w') as fp:
+            json.dump(mapping,fp,indent=4)
+
+                
 
     
