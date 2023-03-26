@@ -1,19 +1,19 @@
 import os
 import json
 import music21
+import numpy as np
+import tensorflow.keras as keras
 
 class Preprocessing:
 
     def __init__(self, MIDI_FILES_PATH):
         self.MIDI_FILES_PATH = MIDI_FILES_PATH
         self.TIME_STEP = 0.25
-        self.path1='x'
         self.SEQUENCE_LENGTH = 64
 
     def load_songs_in_midi(self):
         songs = []
-        for path , subdirs , files in os.walk(self.MIDI_FILES_PATH):
-            self.path1=path
+        for path , _ , files in os.walk(self.MIDI_FILES_PATH):
             for file in files:
                 song = music21.converter.parse(os.path.join(path,file)) 
                 songs.append(song)
@@ -89,6 +89,30 @@ class Preprocessing:
             mapping[symbol]=i
         with open('Mapping.json','w') as fp:
             json.dump(mapping,fp,indent=4)
+
+    def convert_songs_to_int(self,songs):
+        int_songs = []
+        with open('Mapping.json','r') as fp:
+            mapping = json.load(fp)
+        songs = songs.split()
+        for symbol in songs:
+            int_songs.append(mapping[symbol])
+        return int_songs
+    
+    def generate_training_sequences(self):
+        songs = self.load('Songs_Dataset')
+        int_songs = self.convert_songs_to_int(songs)
+        inputs = []
+        targets = []
+        num_sequences = len(int_songs)-self.SEQUENCE_LENGTH
+        for i in range(num_sequences):
+            inputs.append(int_songs[i:i+self.SEQUENCE_LENGTH])
+            targets.append(int_songs[i+self.SEQUENCE_LENGTH])
+        vocabulary_size = len(set(int_songs))
+        inputs = keras.utils.to_categorical(inputs , num_classes=vocabulary_size)
+        targets = np.array(targets)
+        return inputs,targets
+
 
                 
 
