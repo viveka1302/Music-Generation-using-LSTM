@@ -1,5 +1,6 @@
-import os
 from Preprocessing import Preprocessing as pp
+from NNTrain import NNTrain
+
 class ProjectRun:
     if __name__ == '__main__':
             prep= pp('midi_songs_piano/')
@@ -19,5 +20,10 @@ class ProjectRun:
             #     print("failed on ")
             transposed_song = prep.transposed(songs[0])
             transposed_song.show()
-            new_songs = prep.create_single_line_dataset()
-            prep.create_mapping(new_songs)
+            # new_songs = prep.create_single_line_dataset()
+            # prep.create_mapping(new_songs)
+            inputs , targets = prep.generate_training_sequences()
+            print(f'There are {len(inputs)} sequences')
+
+            nn = NNTrain(inputs,targets)
+            nn.train()
