@@ -2,7 +2,7 @@ import os
 import json
 import music21
 import numpy as np
-import tensorflow.keras as keras
+from tensorflow import keras
 
 class Preprocessing:
 
