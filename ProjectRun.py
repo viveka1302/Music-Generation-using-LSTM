@@ -18,8 +18,8 @@ class ProjectRun:
             #     prep.preprocess(perfffy= perfFiles)
             # except Exception as e:
             #     print("failed on ")
-            transposed_song = prep.transposed(songs[0])
-            transposed_song.show()
+            #transposed_song = prep.transposed(songs[0])
+           # transposed_song.show()
             # new_songs = prep.create_single_line_dataset()
             # prep.create_mapping(new_songs)
             inputs , targets = prep.generate_training_sequences()
