@@ -1,5 +1,7 @@
 from Preprocessing import Preprocessing as pp
 from NNTrain import NNTrain
+from MelodyGenerator import MelodyGenerator
+import numpy as np
 
 class ProjectRun:
     if __name__ == '__main__':
@@ -18,12 +20,18 @@ class ProjectRun:
             #     prep.preprocess(perfffy= perfFiles)
             # except Exception as e:
             #     print("failed on ")
-            #transposed_song = prep.transposed(songs[0])
-           # transposed_song.show()
+            transposed_song = prep.transposed(songs[0])
+            transposed_song.show()
             # new_songs = prep.create_single_line_dataset()
             # prep.create_mapping(new_songs)
             inputs , targets = prep.generate_training_sequences()
             print(f'There are {len(inputs)} sequences')
 
-            nn = NNTrain(inputs,targets)
-            nn.train()
+            # nn = NNTrain(inputs,targets)
+            # nn.train()
+            mg = MelodyGenerator('model.h5')
+            seed = '67 _ _ _ r _ _ 81 _ _ _ 66 _ _ _ r _'
+            melody = mg.generate_melody(seed,600,64,0.3)
+            print(melody)
+            mg.save_melody(melody)
+
