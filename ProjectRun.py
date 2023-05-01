@@ -1,5 +1,6 @@
 from Preprocessing import Preprocessing as pp
 from NNTrain import NNTrain
+from GRU_Model import GRU_Model
 from MelodyGenerator import MelodyGenerator
 import numpy as np
 
@@ -29,9 +30,12 @@ class ProjectRun:
 
             # nn = NNTrain(inputs,targets)
             # nn.train()
-            mg = MelodyGenerator('model.h5')
-            seed = '67 _ _ _ r _ _ 81 _ _ _ 66 _ _ _ r _'
-            melody = mg.generate_melody(seed,600,64,0.3)
-            print(melody)
-            mg.save_melody(melody)
+
+            gru = GRU_Model(inputs,targets)
+            gru.train()
+            # mg = MelodyGenerator('model.h5')
+            # seed = '67 _ _ _ r _ _ 81 _ _ _ 66 _ _ _ r _'
+            # melody = mg.generate_melody(seed,600,64,0.3)
+            # print(melody)
+            # mg.save_melody(melody)
 
