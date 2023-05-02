@@ -45,7 +45,7 @@ class MelodyGenerator:
         index = np.random.choice(choices,p=probabilites)
         return index
     
-    def save_melody(self,melody,format='midi',file_name='output2.midi'):
+    def save_melody(self,melody,format='midi',file_name='output4.midi'):
 
         stream = m21.stream.Stream()
         start_symbol = None

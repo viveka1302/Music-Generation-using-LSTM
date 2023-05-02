@@ -1,6 +1,6 @@
 import tensorflow
 import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from tensorflow import keras as keras
 from keras.layers import LSTM
 from keras.layers import BatchNormalization

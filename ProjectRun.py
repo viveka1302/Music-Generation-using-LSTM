@@ -1,5 +1,5 @@
 from Preprocessing import Preprocessing as pp
-from NNTrain import NNTrain
+#from NNTrain import NNTrain
 from GRU_Model import GRU_Model
 from MelodyGenerator import MelodyGenerator
 import numpy as np
@@ -21,8 +21,8 @@ class ProjectRun:
             #     prep.preprocess(perfffy= perfFiles)
             # except Exception as e:
             #     print("failed on ")
-            transposed_song = prep.transposed(songs[0])
-            transposed_song.show()
+           # transposed_song = prep.transposed(songs[0])
+           # transposed_song.show()
             # new_songs = prep.create_single_line_dataset()
             # prep.create_mapping(new_songs)
             inputs , targets = prep.generate_training_sequences()
@@ -31,11 +31,11 @@ class ProjectRun:
             # nn = NNTrain(inputs,targets)
             # nn.train()
 
-            gru = GRU_Model(inputs,targets)
-            gru.train()
-            # mg = MelodyGenerator('model.h5')
-            # seed = '67 _ _ _ r _ _ 81 _ _ _ 66 _ _ _ r _'
-            # melody = mg.generate_melody(seed,600,64,0.3)
-            # print(melody)
-            # mg.save_melody(melody)
+            # gru = GRU_Model(inputs,targets)
+            # gru.train()
+            mg = MelodyGenerator('model_gru.h5')
+            seed = '55 _ _ 60 _ _ 65 _ _ 57 _ _ r'
+            melody = mg.generate_melody(seed,400,64,0.3)
+            print(melody)
+            mg.save_melody(melody)
 
