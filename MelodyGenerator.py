@@ -2,6 +2,7 @@ import tensorflow.keras as keras
 import json
 import numpy as np
 import music21 as m21
+import os
 
 class MelodyGenerator:
     
@@ -45,7 +46,16 @@ class MelodyGenerator:
         index = np.random.choice(choices,p=probabilites)
         return index
     
-    def save_melody(self,melody,format='midi',file_name='output4.midi'):
+    def load_files(self):
+        count=0
+        for root_dir, _, files in os.walk(r'Output Files'):
+            count+= len(files)
+        return count
+    
+    def save_melody(self,melody,format='midi'):
+
+        length_output = self.load_files()
+        file_name=f'Output Files/output{length_output+1}.midi'
 
         stream = m21.stream.Stream()
         start_symbol = None
