@@ -5,12 +5,13 @@ from keras.layers import BatchNormalization
 from keras.layers import Dense
 from keras.layers import Dropout
 from keras.layers import Activation
-from Callbacks import Callbacks
+import os
+import matplotlib.pyplot as plt
 
 class GRU_Model:
     
     def __init__(self,inputs,targets):    
-     
+        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
         self.INPUT = inputs
         self.OUTPUT = targets
         self.OUTPUT_UNITS = 88
@@ -44,14 +45,15 @@ class GRU_Model:
         model.summary()
         return model  
 
-    def split_data(self):
-        x_train, x_test, y_train, y_test = train_test_split(self.INPUT, self.OUTPUT, test_size=0.2, random_state=42)
-        return x_train,x_test,y_train,y_test
 
     def train(self):
-        cb = Callbacks()
         model = self.build_model()
-        x_train,x_test,y_train,y_test = self.split_data()
-        history = model.fit(x_train,y_train,epochs=15,batch_size=self.BATCH_SIZE,callbacks=cb)
-        eval = model.evaluate(history,x_test)
+        history = model.fit(self.INPUT,self.OUTPUT,epochs=15,batch_size=self.BATCH_SIZE)
+        plt.plot(history.history['accuracy'])
+        plt.plot(history.history['loss'])
+        plt.title('Accuracy vs Loss')
+        plt.ylabel('Accuracy')
+        plt.xlabel('Epoch')
+        plt.legend(['Accuracy','Loss'],loc='upper left')
+        plt.show()
         model.save('model_gru.h5')
